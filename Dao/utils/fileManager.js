@@ -27,13 +27,7 @@ class FileManager {
     fs.writeFileSync(this.filename, JSON.stringify(this.elements, null, 2));
   }
 
-  addProduct(product, res) {
-    const found = this.elements.find((x) => x.code === product.code);
-    if (found) {
-      res.status(409).json({ error: "El producto ya existe" });
-      return;
-    }
-
+  validateProduct(product, res) {
     const errorMsg = "Estos campos son obligatorios: title, description, price, code, status, stock, category"
 
     if (!product.title || typeof product.title !== "string") {
@@ -75,6 +69,17 @@ class FileManager {
         .json({ error: `${errorMsg}. Category debe ser string` });
       return;
     }
+    return
+  }
+
+  addProduct(product, res) {
+    const found = this.elements.find((x) => x.code === product.code);
+    if (found) {
+      res.status(409).json({ error: "El producto ya existe" });
+      return;
+    }
+
+    this.validateProduct(product, res)
 
     if (product.status === undefined || product.status === null || product.status === 0) {
       product.status = true
@@ -88,7 +93,7 @@ class FileManager {
     return product;
   }
 
-  // add to route
+  
   getProducById(id) {
     const found = this.elements.filter((x) => x.id === id);
     if (found.length === 0) {
@@ -98,7 +103,7 @@ class FileManager {
     return found;
   }
 
-  // add to route
+  
   updateProduct(id, productUpdate, res) {
     const indexToUpdate = this.elements.findIndex(
       (product) => product.id === id
@@ -130,6 +135,17 @@ class FileManager {
       res.status(404).json({ error: "No se encontró el producto con el ID dado" });
     }
     this.save();
+  }
+
+  createCart() {
+    const newCart = {}
+    this.length += 1;
+    newCart.id = this.length;
+    newCart.products = []
+
+    this.elements.push(newCart);
+    this.save();
+    return newCart;
   }
 }
 

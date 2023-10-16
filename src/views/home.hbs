@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+</head>
+<body>
+    <h1>Hola mundo</h1>
+
+    <h2>Enviar mensaje</h2>
+    <form id="add-message-form" action="/api/messages" method="POST">
+        <label for="message-user">Usuario:</label>
+        <input type="text" id="message-user" name="user" required>
+        <label for="message-text">Mensaje:</label>
+        <input type="text" id="message-text" name="message" required>
+        <button type="submit">Enviar</button>
+    </form>
+    <script src=""></script>
+</body>
+</html>
